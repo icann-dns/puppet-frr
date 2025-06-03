@@ -7,7 +7,7 @@
 ### Classes
 
 * [`frr`](#frr): Frr routing server.
-* [`frr::bgpd`](#frr--bgpd): bgpd class
+* [`frr::bgpd`](#frr--bgpd)
 
 ### Defined types
 
@@ -34,7 +34,20 @@ The following parameters are available in the `frr` class:
 * [`package`](#-frr--package)
 * [`service`](#-frr--service)
 * [`enable`](#-frr--enable)
-* [`content`](#-frr--content)
+* [`zebra_content`](#-frr--zebra_content)
+* [`conf_file`](#-frr--conf_file)
+* [`log_stdout`](#-frr--log_stdout)
+* [`log_stdout_level`](#-frr--log_stdout_level)
+* [`log_file`](#-frr--log_file)
+* [`log_file_path`](#-frr--log_file_path)
+* [`log_file_level`](#-frr--log_file_level)
+* [`log_syslog`](#-frr--log_syslog)
+* [`log_syslog_level`](#-frr--log_syslog_level)
+* [`log_syslog_facility`](#-frr--log_syslog_facility)
+* [`log_monitor`](#-frr--log_monitor)
+* [`log_monitor_level`](#-frr--log_monitor_level)
+* [`log_record_priority`](#-frr--log_record_priority)
+* [`log_timestamp_precision`](#-frr--log_timestamp_precision)
 * [`bgp_listenon`](#-frr--bgp_listenon)
 
 ##### <a name="-frr--owner"></a>`owner`
@@ -75,7 +88,7 @@ Data type: `String`
 
 The service to manage.
 
-Default value: `'zebra'`
+Default value: `'frr'`
 
 ##### <a name="-frr--enable"></a>`enable`
 
@@ -85,13 +98,117 @@ Whether to enable the zebra daemon.
 
 Default value: `true`
 
-##### <a name="-frr--content"></a>`content`
+##### <a name="-frr--zebra_content"></a>`zebra_content`
 
 Data type: `String`
 
 The content of the zebra configuration file.
 
 Default value: `"hostname ${facts['networking']['fqdn']}"`
+
+##### <a name="-frr--conf_file"></a>`conf_file`
+
+Data type: `Stdlib::Unixpath`
+
+The path to the frr configuration file.
+
+Default value: `'/etc/frr/frr.conf'`
+
+##### <a name="-frr--log_stdout"></a>`log_stdout`
+
+Data type: `Boolean`
+
+Log to stdout
+
+Default value: `false`
+
+##### <a name="-frr--log_stdout_level"></a>`log_stdout_level`
+
+Data type: `Frr::Log_level`
+
+Logging level
+
+Default value: `'debugging'`
+
+##### <a name="-frr--log_file"></a>`log_file`
+
+Data type: `Boolean`
+
+Log to file
+
+Default value: `false`
+
+##### <a name="-frr--log_file_path"></a>`log_file_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The log file to use
+
+Default value: `'/var/log/frr/bgpd.log'`
+
+##### <a name="-frr--log_file_level"></a>`log_file_level`
+
+Data type: `Frr::Log_level`
+
+The log level to use
+
+Default value: `'debugging'`
+
+##### <a name="-frr--log_syslog"></a>`log_syslog`
+
+Data type: `Boolean`
+
+log to syslog
+
+Default value: `false`
+
+##### <a name="-frr--log_syslog_level"></a>`log_syslog_level`
+
+Data type: `Frr::Log_level`
+
+syslog level
+
+Default value: `'debugging'`
+
+##### <a name="-frr--log_syslog_facility"></a>`log_syslog_facility`
+
+Data type: `Stdlib::Syslogfacility`
+
+syslog facility
+
+Default value: `'daemon'`
+
+##### <a name="-frr--log_monitor"></a>`log_monitor`
+
+Data type: `Boolean`
+
+log to monitor
+
+Default value: `false`
+
+##### <a name="-frr--log_monitor_level"></a>`log_monitor_level`
+
+Data type: `Frr::Log_level`
+
+log to level
+
+Default value: `'debugging'`
+
+##### <a name="-frr--log_record_priority"></a>`log_record_priority`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-frr--log_timestamp_precision"></a>`log_timestamp_precision`
+
+Data type: `Integer[0,6]`
+
+logging precission
+
+Default value: `1`
 
 ##### <a name="-frr--bgp_listenon"></a>`bgp_listenon`
 
@@ -103,12 +220,14 @@ Default value: `undef`
 
 ### <a name="frr--bgpd"></a>`frr::bgpd`
 
-bgpd class
+The frr::bgpd class.
 
 #### Parameters
 
 The following parameters are available in the `frr::bgpd` class:
 
+* [`fib_update`](#-frr--bgpd--fib_update)
+* [`peers`](#-frr--bgpd--peers)
 * [`my_asn`](#-frr--bgpd--my_asn)
 * [`router_id`](#-frr--bgpd--router_id)
 * [`enable`](#-frr--bgpd--enable)
@@ -121,293 +240,12 @@ The following parameters are available in the `frr::bgpd` class:
 * [`reject_bogons_v4`](#-frr--bgpd--reject_bogons_v4)
 * [`reject_bogons_v6`](#-frr--bgpd--reject_bogons_v6)
 * [`failover_server`](#-frr--bgpd--failover_server)
+* [`inject_static_routes`](#-frr--bgpd--inject_static_routes)
 * [`enable_advertisements`](#-frr--bgpd--enable_advertisements)
 * [`enable_advertisements_v4`](#-frr--bgpd--enable_advertisements_v4)
 * [`enable_advertisements_v6`](#-frr--bgpd--enable_advertisements_v6)
-* [`conf_file`](#-frr--bgpd--conf_file)
 * [`bgpd_cmd`](#-frr--bgpd--bgpd_cmd)
 * [`debug_bgp`](#-frr--bgpd--debug_bgp)
-* [`log_stdout`](#-frr--bgpd--log_stdout)
-* [`log_stdout_level`](#-frr--bgpd--log_stdout_level)
-* [`log_file`](#-frr--bgpd--log_file)
-* [`log_file_path`](#-frr--bgpd--log_file_path)
-* [`log_file_level`](#-frr--bgpd--log_file_level)
-* [`logrotate_enable`](#-frr--bgpd--logrotate_enable)
-* [`logrotate_rotate`](#-frr--bgpd--logrotate_rotate)
-* [`logrotate_size`](#-frr--bgpd--logrotate_size)
-* [`log_syslog`](#-frr--bgpd--log_syslog)
-* [`log_syslog_level`](#-frr--bgpd--log_syslog_level)
-* [`log_syslog_facility`](#-frr--bgpd--log_syslog_facility)
-* [`log_monitor`](#-frr--bgpd--log_monitor)
-* [`log_monitor_level`](#-frr--bgpd--log_monitor_level)
-* [`log_record_priority`](#-frr--bgpd--log_record_priority)
-* [`log_timestamp_precision`](#-frr--bgpd--log_timestamp_precision)
-* [`fib_update`](#-frr--bgpd--fib_update)
-* [`peers`](#-frr--bgpd--peers)
-
-##### <a name="-frr--bgpd--my_asn"></a>`my_asn`
-
-Data type: `Integer[1,4294967295]`
-
-The local ASN number
-
-Default value: `undef`
-
-##### <a name="-frr--bgpd--router_id"></a>`router_id`
-
-Data type: `Stdlib::IP::Address::V4`
-
-The router_id
-
-Default value: `undef`
-
-##### <a name="-frr--bgpd--enable"></a>`enable`
-
-Data type: `Boolean`
-
-if to enable bgpd
-
-Default value: `true`
-
-##### <a name="-frr--bgpd--networks4"></a>`networks4`
-
-Data type: `Array[Stdlib::IP::Address::V4::CIDR]`
-
-List of v4 networks to advertise
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--failsafe_networks4"></a>`failsafe_networks4`
-
-Data type: `Array[Stdlib::IP::Address::V4::CIDR]`
-
-List of v4 failsafe networks to advertise
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--networks6"></a>`networks6`
-
-Data type: `Array[Stdlib::IP::Address::V6::CIDR]`
-
-List of v6 networks to advertise
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--failsafe_networks6"></a>`failsafe_networks6`
-
-Data type: `Array[Stdlib::IP::Address::V6::CIDR]`
-
-List of v6 failsafe networks to advertise
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--rejected_v4"></a>`rejected_v4`
-
-Data type: `Array[Stdlib::IP::Address::V4::CIDR]`
-
-list of v4 networks to reject
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--rejected_v6"></a>`rejected_v6`
-
-Data type: `Array[Stdlib::IP::Address::V6::CIDR]`
-
-list of v6 networks to reject
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--reject_bogons_v4"></a>`reject_bogons_v4`
-
-Data type: `Boolean`
-
-list of v4 bogons to reject
-
-Default value: `true`
-
-##### <a name="-frr--bgpd--reject_bogons_v6"></a>`reject_bogons_v6`
-
-Data type: `Boolean`
-
-list of v6 bogons to reject
-
-Default value: `true`
-
-##### <a name="-frr--bgpd--failover_server"></a>`failover_server`
-
-Data type: `Boolean`
-
-If this is a failover server
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--enable_advertisements"></a>`enable_advertisements`
-
-Data type: `Boolean`
-
-weather we should advertise bgp networks
-
-Default value: `true`
-
-##### <a name="-frr--bgpd--enable_advertisements_v4"></a>`enable_advertisements_v4`
-
-Data type: `Boolean`
-
-weather we should advertise bgp v4networks
-
-Default value: `true`
-
-##### <a name="-frr--bgpd--enable_advertisements_v6"></a>`enable_advertisements_v6`
-
-Data type: `Boolean`
-
-weather we should advertise bgp v6networks
-
-Default value: `true`
-
-##### <a name="-frr--bgpd--conf_file"></a>`conf_file`
-
-Data type: `Stdlib::Absolutepath`
-
-location of bgp config file
-
-Default value: `'/etc/frr/bgpd.conf'`
-
-##### <a name="-frr--bgpd--bgpd_cmd"></a>`bgpd_cmd`
-
-Data type: `Stdlib::Absolutepath`
-
-location of bgp config comand
-
-Default value: `'/usr/sbin/bgpd'`
-
-##### <a name="-frr--bgpd--debug_bgp"></a>`debug_bgp`
-
-Data type: `Array`
-
-Debug options
-
-Default value: `[]`
-
-##### <a name="-frr--bgpd--log_stdout"></a>`log_stdout`
-
-Data type: `Boolean`
-
-Log to stdout
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--log_stdout_level"></a>`log_stdout_level`
-
-Data type: `Frr::Log_level`
-
-Logging level
-
-Default value: `'debugging'`
-
-##### <a name="-frr--bgpd--log_file"></a>`log_file`
-
-Data type: `Boolean`
-
-Log to file
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--log_file_path"></a>`log_file_path`
-
-Data type: `Stdlib::Absolutepath`
-
-The log file to use
-
-Default value: `'/var/log/frr/bgpd.log'`
-
-##### <a name="-frr--bgpd--log_file_level"></a>`log_file_level`
-
-Data type: `Frr::Log_level`
-
-The log level to use
-
-Default value: `'debugging'`
-
-##### <a name="-frr--bgpd--logrotate_enable"></a>`logrotate_enable`
-
-Data type: `Boolean`
-
-Enable logrotate
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--logrotate_rotate"></a>`logrotate_rotate`
-
-Data type: `Integer[1,100]`
-
-how many rotated files to keep
-
-Default value: `5`
-
-##### <a name="-frr--bgpd--logrotate_size"></a>`logrotate_size`
-
-Data type: `String`
-
-rotation size
-
-Default value: `'100M'`
-
-##### <a name="-frr--bgpd--log_syslog"></a>`log_syslog`
-
-Data type: `Boolean`
-
-log to syslog
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--log_syslog_level"></a>`log_syslog_level`
-
-Data type: `Frr::Log_level`
-
-syslog level
-
-Default value: `'debugging'`
-
-##### <a name="-frr--bgpd--log_syslog_facility"></a>`log_syslog_facility`
-
-Data type: `Stdlib::Syslogfacility`
-
-syslog facility
-
-Default value: `'daemon'`
-
-##### <a name="-frr--bgpd--log_monitor"></a>`log_monitor`
-
-Data type: `Boolean`
-
-log to monitor
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--log_monitor_level"></a>`log_monitor_level`
-
-Data type: `Frr::Log_level`
-
-log to level
-
-Default value: `'debugging'`
-
-##### <a name="-frr--bgpd--log_record_priority"></a>`log_record_priority`
-
-Data type: `Boolean`
-
-
-
-Default value: `false`
-
-##### <a name="-frr--bgpd--log_timestamp_precision"></a>`log_timestamp_precision`
-
-Data type: `Integer[0,6]`
-
-logging precission
-
-Default value: `1`
 
 ##### <a name="-frr--bgpd--fib_update"></a>`fib_update`
 
@@ -424,6 +262,150 @@ Data type: `Hash`
 A hash of peers
 
 Default value: `{}`
+
+##### <a name="-frr--bgpd--my_asn"></a>`my_asn`
+
+Data type: `Integer[1,4294967295]`
+
+
+
+Default value: `undef`
+
+##### <a name="-frr--bgpd--router_id"></a>`router_id`
+
+Data type: `Stdlib::IP::Address::V4`
+
+
+
+Default value: `undef`
+
+##### <a name="-frr--bgpd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--networks4"></a>`networks4`
+
+Data type: `Array[Stdlib::IP::Address::V4::CIDR]`
+
+
+
+Default value: `[]`
+
+##### <a name="-frr--bgpd--failsafe_networks4"></a>`failsafe_networks4`
+
+Data type: `Array[Stdlib::IP::Address::V4::CIDR]`
+
+
+
+Default value: `[]`
+
+##### <a name="-frr--bgpd--networks6"></a>`networks6`
+
+Data type: `Array[Stdlib::IP::Address::V6::CIDR]`
+
+
+
+Default value: `[]`
+
+##### <a name="-frr--bgpd--failsafe_networks6"></a>`failsafe_networks6`
+
+Data type: `Array[Stdlib::IP::Address::V6::CIDR]`
+
+
+
+Default value: `[]`
+
+##### <a name="-frr--bgpd--rejected_v4"></a>`rejected_v4`
+
+Data type: `Array[Stdlib::IP::Address::V4::CIDR]`
+
+
+
+Default value: `[]`
+
+##### <a name="-frr--bgpd--rejected_v6"></a>`rejected_v6`
+
+Data type: `Array[Stdlib::IP::Address::V6::CIDR]`
+
+
+
+Default value: `[]`
+
+##### <a name="-frr--bgpd--reject_bogons_v4"></a>`reject_bogons_v4`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--reject_bogons_v6"></a>`reject_bogons_v6`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--failover_server"></a>`failover_server`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-frr--bgpd--inject_static_routes"></a>`inject_static_routes`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--enable_advertisements"></a>`enable_advertisements`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--enable_advertisements_v4"></a>`enable_advertisements_v4`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--enable_advertisements_v6"></a>`enable_advertisements_v6`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-frr--bgpd--bgpd_cmd"></a>`bgpd_cmd`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/usr/lib/frr/bgpd'`
+
+##### <a name="-frr--bgpd--debug_bgp"></a>`debug_bgp`
+
+Data type: `Array`
+
+
+
+Default value: `[]`
 
 ## Defined types
 

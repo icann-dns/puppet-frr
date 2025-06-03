@@ -27,14 +27,14 @@ define frr::bgpd::peer (
     concat::fragment { "bgpd_peer_${name}":
       target  => $frr::bgpd::conf_file,
       content => template('frr/bgpd.conf.peer.erb'),
-      order   => '10',
+      order   => '30',
     }
   }
   unless $addr6.empty {
     concat::fragment { "bgpd_v6peer_${name}":
       target  => $frr::bgpd::conf_file,
       content => template('frr/bgpd.conf.v6peer.erb'),
-      order   => '40',
+      order   => '50',
     }
   }
   concat::fragment { "frr_bgpd_routemap_${name}":

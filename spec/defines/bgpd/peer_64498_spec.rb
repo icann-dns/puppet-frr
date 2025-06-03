@@ -34,8 +34,8 @@ describe 'frr::bgpd::peer' do
 
         it do
           is_expected.to contain_concat__fragment('bgpd_peer_64498').with(
-            order: '10',
-            target: '/etc/frr/bgpd.conf'
+            order: '30',
+            target: '/etc/frr/frr.conf'
           ).with_content(
             %r{neighbor 192.0.2.2 remote-as 64498}
           ).with_content(
@@ -58,7 +58,7 @@ describe 'frr::bgpd::peer' do
         it do
           is_expected.to contain_concat__fragment('frr_bgpd_routemap_64498').with(
             order: '90',
-            target: '/etc/frr/bgpd.conf'
+            target: '/etc/frr/frr.conf'
           ).without_content(
             %r{route-map outbound-64498}
           ).without_content(
