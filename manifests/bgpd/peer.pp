@@ -8,9 +8,11 @@
 # @param password The password to use.
 # @param prepend The prepend value.
 # @param default_originate Whether to default originate.
+# @param next_hop_self set next hop self
 define frr::bgpd::peer (
   Boolean                        $default_originate = false,
-  Frr::Routes_acl             $inbound_routes    = 'none',
+  Boolean                        $next_hop_self     = true,
+  Frr::Routes_acl                $inbound_routes    = 'none',
   String                         $desc              = undef,
   Array                          $communities       = [],
   Array[Stdlib::IP::Address::V4] $addr4             = [],
@@ -28,6 +30,27 @@ define frr::bgpd::peer (
       target  => $frr::bgpd::conf_file,
       content => template('frr/bgpd.conf.peer.erb'),
       order   => '30',
+    }
+  }
+  unless $addr4.empty {
+    $activate = $addr4.map |$addr| {
+      "  neighbor ${addr} activate"
+    }.join("\n")
+    concat::fragment { "bgpd_peer_activate_${name}":
+      target  => $frr::bgpd::conf_file,
+      content => "${activate}\n",
+      order   => '36',
+    }
+    if $next_hop_self {
+      $next_hop_content = $addr4.map |$addr| {
+        "  neighbor ${addr} next-hop-self"
+      }.join("\n")
+
+      concat::fragment { "bgpd_peer_next_hop_${name}":
+        target  => $frr::bgpd::conf_file,
+        content => "${next_hop_content}\n",
+        order   => '37',
+      }
     }
   }
   unless $addr6.empty {

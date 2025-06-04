@@ -38,12 +38,18 @@ class frr::bgpd (
   Boolean                              $enable_advertisements_v4 = true,
   Boolean                              $enable_advertisements_v6 = true,
   Stdlib::Absolutepath                 $bgpd_cmd                 = '/usr/lib/frr/bgpd',
-  Array                                $debug_bgp                = [],
+  Array[Frr::Debug_bgp]                $debug_bgp                = [],
   Boolean                              $fib_update               = true,
   Hash                                 $peers                    = {},
 ) {
   include frr
   $conf_file = $frr::conf_file
+  $v4_netwokrs = ($networks4 + $failsafe_networks4).map |$network| {
+    "  network ${network}"
+  }.join("\n")
+  $v6_networks = ($networks6 + $failsafe_networks6).map |$network| {
+    "  network ${network}"
+  }.join("\n")
 
   ini_setting {
     default:
@@ -74,6 +80,16 @@ class frr::bgpd (
     content => template('frr/bgpd.conf.head.erb'),
     order   => '20',
   }
+  concat::fragment { 'frr_bgpd_v4head':
+    target  => $conf_file,
+    content => "!\n address-family ipv4 unicast\n",
+    order   => '35',
+  }
+  concat::fragment { 'frr_bgpd_v4foot':
+    target  => $conf_file,
+    content => "${v4_netwokrs}\n!\n  exit-address-family\n",
+    order   => '39',
+  }
   concat::fragment { 'frr_bgpd_v6head':
     target  => $conf_file,
     content => "!\n address-family ipv6\n",
@@ -81,7 +97,7 @@ class frr::bgpd (
   }
   concat::fragment { 'frr_bgpd_v6foot':
     target  => $conf_file,
-    content => template('frr/bgpd.conf.v6foot.erb'),
+    content => "${v6_networks}\n!\n  exit-address-family\n",
     order   => '60',
   }
   concat::fragment { 'frr_bgpd_acl':
