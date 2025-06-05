@@ -1,22 +1,7 @@
 
-<%- @debug_bgp.each do |debug|
-  @valid_entries = ['as4', 'events', 'filters', 'fsm', 'keepalives',
-      'updates', 'zebra']
-  if ! @valid_entries.include? debug then
-    raise Puppet::Error, "debug_bgp only supports #{@valid_entries.join(' ')}"
-  end -%>
+<%- @debug_bgp.each do |debug| -%>
 debug bgp <%= debug %>
 <%- end -%>
 router bgp <%= @my_asn %>
 !
  bgp router-id <%= @router_id %>
-<%- if @networks4 then -%>
-  <%- @networks4.each do |network| -%>
- network <%= network %>
-  <%- end -%>
-<%- end -%>
-<%- if @failsafe_networks4 then -%>
-  <%- @failsafe_networks4.each do |network| -%>
- network <%= network %>
-  <%- end -%>
-<%- end -%>

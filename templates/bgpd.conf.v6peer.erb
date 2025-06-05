@@ -1,5 +1,8 @@
 <%- @addr6.each do |addr| -%>
   neighbor <%= addr %> activate
+  <%- if @next_hop_self then -%>
+  neighbor <%= addr %> next-hop-self
+  <%- end -%>
   <%- if @default_originate then -%>
  neighbor <%= addr %> default-originate
   <%- end -%>
