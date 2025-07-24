@@ -25,6 +25,11 @@ define frr::bgpd::peer (
 
   $my_asn = $frr::bgpd::my_asn
 
+  $large_communities = $communities.filter |$comm| {
+    $comm =~ /^\d+:\d+:\d+$/
+  }
+  $standard_communities = $communities - $large_communities
+
   unless ($addr4 + $addr6).empty {
     concat::fragment { "bgpd_peer_${name}":
       target  => $frr::bgpd::conf_file,

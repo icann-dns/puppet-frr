@@ -1,11 +1,14 @@
-<%- if @communities.any? or @prepend -%>
-  <%- if @communities.any? then
-    @no_export = @communities.include?('no-export')
+<%- if @standard_communities.any? or @prepend -%>
+  <%- if @standard_communities.any? then
+    @no_export = @standard_communities.include?('no-export')
   end -%>
 route-map outbound-<%= @name %> permit 10
   match ip address prefix-list specific-v4
-  <%- if @communities.any? or @no_export -%>
-  set community <%= @communities.reject{ |x| x == 'no-export' }.join(' ') %><%- if @no_export -%> no-export<%- end %>
+  <%- if @standard_communities.any? or @no_export -%>
+  set community <%= @standard_communities.reject{ |x| x == 'no-export' }.join(' ') %><%- if @no_export -%> no-export<%- end %>
+  <%- end -%>
+  <%- if @large_communities.any? -%>
+  set large-community <%= @large_communities.join(' ') %>
   <%- end -%>
   <%- if @prepend -%>
   set as-path prepend<%= " #{@my_asn}" * @prepend.to_i %>
@@ -14,8 +17,11 @@ route-map outbound-<%= @name %> permit 20
 !
 route-map outbound-<%= @name %>-v6 permit 10
   match ipv6 address prefix-list specific-v6
-  <%- if @communities.any? or @no_export -%>
-  set community <%= @communities.reject{ |x| x == 'no-export' }.join(' ') %><%- if @no_export -%> no-export<%- end %>
+  <%- if @standard_communities.any? or @no_export -%>
+  set community <%= @standard_communities.reject{ |x| x == 'no-export' }.join(' ') %><%- if @no_export -%> no-export<%- end %>
+  <%- end -%>
+  <%- if @large_communities.any? -%>
+  set large-community <%= @large_communities.join(' ') %>
   <%- end -%>
   <%- if @prepend -%>
   set as-path prepend<%= " #{@my_asn}" * @prepend.to_i %>
