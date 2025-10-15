@@ -44,27 +44,11 @@ class frr (
   Optional[Stdlib::IP::Address] $bgp_listenon             = undef
 ) {
   ensure_packages([$package])
-  file {
-    default:
-      ensure  => file,
-      owner   => $owner,
-      group   => $group,
-      mode    => $mode,
-      require => Package[$package],
-      notify  => Service[$service];
-    '/etc/frr':
-      ensure  => directory;
-    '/etc/frr/zebra.conf':
-      content => $zebra_content;
-  }
-  file { '/etc/frr/vtysh.conf':
-    ensure => file,
+  file { '/etc/frr':
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
     mode   => $mode,
-    source => 'puppet:///modules/frr/vtysh.conf',
-  }
-  file { '/etc/profile.d/vtysh.sh':
-    ensure => file,
-    source => 'puppet:///modules/frr/vtysh.sh',
   }
   # TODO: check if we still need this
   # the frr validate command runs without CAP_DAC_OVERRIDE
@@ -93,17 +77,22 @@ class frr (
     content => template('frr/frr.conf.head.erb'),
     order   => '01',
   }
-  ini_setting { 'zebra':
-    ensure  => present,
-    path    => '/etc/frr/daemons',
-    section => '',
-    setting => 'zebra',
-    value   => $enable.bool2str('yes','no'),
-    require => Package[$package],
-    notify  => Service[$service],
-  }
   service { $service:
     ensure => running,
     enable => true,
+  }
+  # TODO: this can be removed once every thing is cleaned up
+  file_line { 'remove zebra line':
+    ensure            => absent,
+    path              => '/etc/frr/daemons',
+    match             => '^zebra\s',
+    match_for_absence => true,
+    notify            => Service[$service],
+    require           => Package[$package],
+  }
+  file { ['/etc/profile.d/vtysh.sh', '/etc/frr/zebra.conf', '/etc/frr/vtysh.conf']:
+    ensure  => absent,
+    notify  => Service[$service],
+    require => Package[$package],
   }
 }

@@ -33,7 +33,7 @@ class frr::bgpd (
   Boolean                              $reject_bogons_v4         = true,
   Boolean                              $reject_bogons_v6         = true,
   Boolean                              $failover_server          = false,
-  Boolean                              $inject_static_routes     = true,
+  Boolean                              $inject_static_routes     = false,
   Boolean                              $enable_advertisements    = true,
   Boolean                              $enable_advertisements_v4 = true,
   Boolean                              $enable_advertisements_v6 = true,
