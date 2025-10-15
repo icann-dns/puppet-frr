@@ -1,3 +1,6 @@
+## 2025-10-15 0.3.0
+* Drop unused files
+
 ## 2025-06-04 0.2.0
 * Add next-hop-self
 
