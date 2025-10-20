@@ -4,7 +4,7 @@
   neighbor <%= addr %> next-hop-self
   <%- end -%>
   <%- if @default_originate then -%>
- neighbor <%= addr %> default-originate
+  neighbor <%= addr %> default-originate
   <%- end -%>
   neighbor <%= addr %> soft-reconfiguration inbound
   neighbor <%= addr %> prefix-list prefix-v6 out
