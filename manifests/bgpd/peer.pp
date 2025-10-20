@@ -4,6 +4,7 @@
 # @param desc The description of the peer.
 # @param inbound_routes The inbound routes to accept.
 # @param communities The communities to accept.
+# @param enforce_first_as enforce first as on received routes.  disable this for route servers
 # @param multihop The multihop value.
 # @param password The password to use.
 # @param prepend The prepend value.
@@ -17,6 +18,7 @@ define frr::bgpd::peer (
   Array                          $communities       = [],
   Array[Stdlib::IP::Address::V4] $addr4             = [],
   Array[Stdlib::IP::Address::V6] $addr6             = [],
+  Boolean                        $enforce_first_as  = true,
   Optional[Integer[1,254]]       $multihop          = undef,
   Optional[String]               $password          = undef,
   Optional[Integer[1,32]]        $prepend           = undef,

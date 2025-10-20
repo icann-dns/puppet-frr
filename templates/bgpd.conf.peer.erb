@@ -13,6 +13,9 @@
  neighbor <%= addr %> default-originate
   <%- end -%>
  neighbor <%= addr %> soft-reconfiguration inbound
+  <%- unless @enforce_first_as -%>
+ no neighbor <%= addr %> enforce-first-as
+  <%- end -%>
  neighbor <%= addr %> prefix-list prefix-v4 out
   <%- if @inbound_routes.to_s == 'default' or @inbound_routes.to_s == 'v4default' then -%>
  neighbor <%= addr %> prefix-list default-route in
@@ -35,6 +38,9 @@
   <%- end -%>
   <%- if @multihop then -%>
  neighbor <%= addr %> ebgp-multihop <%= @multihop %>
+  <%- end -%>
+  <%- unless @enforce_first_as -%>
+ no neighbor <%= addr %> enforce-first-as
   <%- end -%>
  no neighbor <%= addr %> activate
 <%- end -%>
