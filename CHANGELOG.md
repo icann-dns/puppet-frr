@@ -1,3 +1,6 @@
+## 2026-01-21 0.5.0
+* Allow one to configure the static route interface
+
 ## 2025-10-15 0.4.0
 * Add options for enforce-first-as
 
