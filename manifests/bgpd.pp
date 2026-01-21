@@ -17,7 +17,7 @@
 # @param enable_advertisements_v6 weather we should advertise bgp v6networks
 # @param bgpd_cmd location of bgp config comand
 # @param debug_bgp Debug options
-
+# param static_interface interface to use for static routes
 # @param fib_update update the local fib
 # @param peers A hash of peers
 class frr::bgpd (
@@ -40,6 +40,7 @@ class frr::bgpd (
   Stdlib::Absolutepath                 $bgpd_cmd                 = '/usr/lib/frr/bgpd',
   Array[Frr::Debug_bgp]                $debug_bgp                = [],
   Boolean                              $fib_update               = true,
+  String[1]                            $static_interface         = 'dummy0'
   Hash                                 $peers                    = {},
 ) {
   include frr
@@ -64,9 +65,9 @@ class frr::bgpd (
   if $inject_static_routes {
     $static_null_routes = (
       ($networks4 + $failsafe_networks4).map |$net| {
-        "ip route ${net} Null0"
+        "ip route ${net} ${static_interface}"
       } + ($networks6 + $failsafe_networks6).map |$net| {
-        "ipv6 route ${net} Null0"
+        "ipv6 route ${net} ${static_interface}"
       }
     ).unique.join("\n")
     concat::fragment { 'frr_bgpd_static_routes':
