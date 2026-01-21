@@ -90,7 +90,16 @@ class frr (
     notify            => Service[$service],
     require           => Package[$package],
   }
-  file { ['/etc/profile.d/vtysh.sh', '/etc/frr/zebra.conf', '/etc/frr/vtysh.conf']:
+  file { '/etc/frr/vtysh.conf':
+    ensure  => file,
+    content => '',
+    owner   => $owner,
+    group   => $group,
+    mode    => $mode,
+    notify  => Service[$service],
+    require => Package[$package],
+  }
+  file { ['/etc/profile.d/vtysh.sh', '/etc/frr/zebra.conf']:
     ensure  => absent,
     notify  => Service[$service],
     require => Package[$package],

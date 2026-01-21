@@ -40,7 +40,7 @@ class frr::bgpd (
   Stdlib::Absolutepath                 $bgpd_cmd                 = '/usr/lib/frr/bgpd',
   Array[Frr::Debug_bgp]                $debug_bgp                = [],
   Boolean                              $fib_update               = true,
-  String[1]                            $static_interface         = 'dummy0'
+  String[1]                            $static_interface         = 'dummy0',
   Hash                                 $peers                    = {},
 ) {
   include frr
