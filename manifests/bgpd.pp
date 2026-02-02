@@ -14,6 +14,7 @@
 # @param enable_advertisements weather we should advertise bgp networks
 # @param enable_advertisements_v4 weather we should advertise bgp v4networks
 # @param enable_advertisements_v6 weather we should advertise bgp v6networks
+# @param disable_import_check disable import check
 # @param bgpd_cmd location of bgp config comand
 # @param debug_bgp Debug options
 # @param fib_update update the local fib
@@ -34,6 +35,7 @@ class frr::bgpd (
   Boolean                              $enable_advertisements    = true,
   Boolean                              $enable_advertisements_v4 = true,
   Boolean                              $enable_advertisements_v6 = true,
+  Boolean                              $disable_import_check     = true,
   Stdlib::Absolutepath                 $bgpd_cmd                 = '/usr/lib/frr/bgpd',
   Array[Frr::Debug_bgp]                $debug_bgp                = [],
   Boolean                              $fib_update               = true,
