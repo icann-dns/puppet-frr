@@ -1,3 +1,7 @@
+## 2026-02-02 0.6.0
+* Drop inject static routes
+* add ability to disable import check
+
 ## 2026-01-21 0.5.0
 * Allow one to configure the static route interface
 
